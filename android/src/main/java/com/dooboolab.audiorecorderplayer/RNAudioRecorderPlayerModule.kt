@@ -88,7 +88,12 @@ import kotlin.math.log10
         audioFileURL = if (((path == "DEFAULT"))) "${reactContext.cacheDir}/$defaultFileName" else path
         _meteringEnabled = meteringEnabled
 
+
         if (mediaRecorder == null) {
+            mediaRecorder = MediaRecorder()
+        }else{
+            mediaRecorder!!.stop()
+            mediaRecorder == null
             mediaRecorder = MediaRecorder()
         }
 
