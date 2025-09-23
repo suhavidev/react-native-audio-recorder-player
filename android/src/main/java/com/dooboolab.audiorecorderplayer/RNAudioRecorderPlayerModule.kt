@@ -89,13 +89,23 @@ import kotlin.math.log10
         _meteringEnabled = meteringEnabled
 
 
-        if (mediaRecorder == null) {
-            mediaRecorder = MediaRecorder()
-        }else{
-            mediaRecorder!!.stop()
-            mediaRecorder == null
-            mediaRecorder = MediaRecorder()
+        if (mediaRecorder != null) {
+            try {
+                    mediaRecorder?.stop()
+                } catch (e: IllegalStateException) {
+                    Log.w(tag, "stop() called in wrong state: ${e.message}")
+            } catch (e: Exception) {
+                Log.e(tag, "Unexpected error when stopping recorder", e)
+        } finally {
+            try {
+                mediaRecorder?.reset()
+                mediaRecorder?.release()
+            } catch (e: Exception) {
+                Log.w(tag, "Error while resetting/releasing recorder: ${e.message}")
+            }
+                mediaRecorder = null
         }
+    }
 
         if (audioSet != null) {
             mediaRecorder!!.setAudioSource(if (audioSet.hasKey("AudioSourceAndroid")) audioSet.getInt("AudioSourceAndroid") else MediaRecorder.AudioSource.MIC)

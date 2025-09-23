@@ -34,7 +34,13 @@ class ForegroundService : Service() {
         }
     }
 
-    override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        if (intent == null) {
+            // Handle case where intent is null: log, notify, or use defaults.
+            // Optionally, return START_STICKY or STOP if you want to stop the service
+            return START_STICKY
+        }
+
         // Start the foreground service with the notification
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
             startForeground(NOTIFICATION_ID, createNotification(), ServiceInfo.FOREGROUND_SERVICE_TYPE_MICROPHONE)
